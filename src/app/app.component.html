@@ -1,4 +1,9 @@
+<div id="search-bar-container">
+	<app-search-bar (searchBottonClicked)="increaseCount()"/>
+    Nbre de clique {{count}}
+</div>
+
 <div id="card-list">
 	<app-card/>
-    <app-card/>
+    <app-card [monster]="monster1"/>
 </div>
