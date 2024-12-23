@@ -1,4 +1,4 @@
 <div id="search-bar">
-	<input placeholder="Search..."/>
+	<input placeholder="Search..." [ngModel] = "searchValue()"  (ngModelChange)="updateSearch($event)"/>
 	<button (click)="searchClique()"><img src="assets/img/search.png"/></button>
 </div>
