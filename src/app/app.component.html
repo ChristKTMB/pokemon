@@ -5,7 +5,8 @@
     Search = {{search}}
 </div>
 
+<button (click)="toggleMonster()">Toggle Card</button>
+<br /><br />
 <div id="card-list">
-	<app-card/>
-    <app-card [monster]="monster1"/>
+	<app-card [monster]="selectedMonster()"/>
 </div>
