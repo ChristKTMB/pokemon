@@ -17,20 +17,26 @@ export class AppComponent {
 
   monsterService = inject(MonsterService);
 
-  monsters! : Monster[];
+  monsters = signal<Monster[]>([]);
   count : number = 0;
   search = model<string>('');
 
   filteredMonsters = computed(() => {
-    return this.monsters.filter(monster => monster.name.includes(this.search()));
+    return this.monsters().filter(monster => monster.name.includes(this.search()));
   });
   
   constructor() {
-    this.monsters = this.monsterService.getAll();
+    this.monsters.set(this.monsterService.getAll());
   }
 
   increaseCount() {
     this.count++;
+  }
+
+  addMonster() {
+    const genericMonster = new Monster();
+    this.monsterService.add(genericMonster);
+    this.monsters.set(this.monsterService.getAll());
   }
 
 }

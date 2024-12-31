@@ -58,7 +58,6 @@ export class MonsterService {
     }
   }
   
-
   private init() {
 
     this.monsters = [];
@@ -91,7 +90,7 @@ export class MonsterService {
     const monster4 = new Monster();
     monster4.id = this.currentIndex++;
     monster4.name = 'Gamera';
-    monster4.image = "https://static.wikia.nocookie.net/monster/images/f/f8/Gengar.png/revision/latest?cb=20190610140622";
+    monster4.image = "https://images.app.goo.gl/pzhEsRqUJZRLFGGV7";
     monster4.type = MonsterType.FIRE;
     monster4.hp = 70;
     monster4.figureCaption = 'No005 Gamera';
@@ -113,6 +112,7 @@ export class MonsterService {
     monsterCopy.id = this.currentIndex;
     this.monsters.push(monsterCopy.copy());
     this.currentIndex++;
+    this.save();
 
     return monsterCopy;
   }
@@ -123,6 +123,7 @@ export class MonsterService {
     const monsterIndex = this.monsters.findIndex(originalMonster => originalMonster.id === monster.id);
     if (monsterIndex != -1 ) {
       this.monsters[monsterIndex] = monsterCopy.copy();
+      this.save();
     }
 
     return monsterCopy;
@@ -132,6 +133,7 @@ export class MonsterService {
     const monsterIndex =  this.monsters.findIndex(originalMonster => originalMonster.id === id);
     if (monsterIndex != -1) {
       this.monsters.splice(monsterIndex, 1)
+      this.save();
     }
   }
 }
