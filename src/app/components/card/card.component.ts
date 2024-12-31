@@ -1,4 +1,4 @@
-import { Component, computed, input, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Monster } from '../../models/monster.model';
 import { MonsterTypeProperties } from '../../utils/monster.utils';
 
@@ -10,8 +10,8 @@ import { MonsterTypeProperties } from '../../utils/monster.utils';
 })
 export class CardComponent{
   
-  monster = input<Monster>(new Monster());
- 	monsterTypeIcon = computed(() => {
+  	monster = input<Monster>(new Monster());
+	monsterTypeIcon = computed(() => {
  		return MonsterTypeProperties[this.monster().type].imageUrl;
  	});
  	backgroundColor = computed(() => {

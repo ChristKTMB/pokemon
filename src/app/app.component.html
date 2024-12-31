@@ -1,12 +1,17 @@
 <div id="search-bar-container">
 	<app-search-bar (searchBottonClicked)="increaseCount()" 
     [(searchValue)]="search"/>
-    Nbre de clique = {{count}} <br>
-    Search = {{search}}
+    Nombre de clique = {{count}} <br>
+    Search = {{search()}}
 </div>
 
-<button (click)="toggleMonster()">Toggle Card</button>
-<br /><br />
 <div id="card-list">
-	<app-card [monster]="selectedMonster()"/>
+	@for (monster of filteredMonsters(); track monster.name) {
+        <app-card [monster]="monster"/>
+    }@empty {
+        <div class="centered">No monsters found !</div>
+    }
 </div>
+@if (filteredMonsters().length > 0) {
+    <div class="centered">Found {{filteredMonsters().length}} monsters</div>
+}
