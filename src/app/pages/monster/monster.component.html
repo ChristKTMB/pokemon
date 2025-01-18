@@ -1,6 +1,17 @@
-@if (monsterId()) {
-	<p>Monster {{monsterId()}}!</p>
-    <button (click)="next()">next</button>
-} @else {
-	<p>New monster!</p>
-}
+<form (submit)="onSubmit($event)">
+  <div class="form-field">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" [formControl]="name">
+    @if (name.invalid && (name.dirty || name.touched)) {
+        <div class="error">This field is required.</div>
+    }
+  </div>
+  <div class="form-field">
+    <label for="name">HP</label>
+    <input id="hp" name="hp" type="number" [formControl]="hp" />
+    @if (hp.invalid && (hp.dirty || hp.touched)) {
+        <div class="error">This field is not valid.</div>
+    }
+</div>
+<button type="submit" [disabled]="name.invalid || hp.invalid">Save</button>
+</form>
