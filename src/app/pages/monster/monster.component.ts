@@ -1,12 +1,15 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MonsterType } from '../../utils/monster.utils';
+import { Monster } from '../../models/monster.model';
+import { CardComponent } from '../../components/card/card.component';
+import { MonsterService } from '../../services/monster/monster.service';
 
 @Component({
   selector: 'app-monster',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CardComponent],
   templateUrl: './monster.component.html',
   styleUrl: './monster.component.css'
 })
@@ -15,9 +18,10 @@ export class MonsterComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
-  monsterId = signal<number | undefined>(undefined);
-  routeSubscription: Subscription | null = null;
+  private monsterService = inject(MonsterService);
+  private routeSubscription: Subscription | null = null;
+  private formValueSubcription: Subscription | null = null;
+  
 
   formGroup = this.fb.group({
     name: ['', [Validators.required]],
@@ -31,27 +35,44 @@ export class MonsterComponent implements OnInit, OnDestroy {
   });
 
   monsterTypes = Object.values(MonsterType);
+  monster: Monster = Object.assign(new Monster(), this.formGroup.value);
+  monsterId = -1;
 
   ngOnInit(): void {
+    this.formValueSubcription = this.formGroup.valueChanges.subscribe(value => {
+      this.monster = Object.assign(new Monster(), value);
+    });
     this.routeSubscription = this.route.params.subscribe(params => {
-      this.monsterId.set(params['id'] ? parseInt(params['id']) : undefined);
-    })
+      if(params['id']){
+        this.monsterId = parseInt(params['id']);
+        const monsterFound = this.monsterService.getById(this.monsterId);
+        if(monsterFound){
+          this.monster = monsterFound;
+          this.formGroup.patchValue(this.monster);
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.formValueSubcription?.unsubscribe();
   }
 
-  next(){
-    let nextId = this.monsterId() || 0;
-    nextId++;
-    this.router.navigate(['/monster/' + nextId]);
+
+  navigateBack(){
+    this.router.navigate(['/']);
   }
 
   onSubmit(event: Event){
     event.preventDefault();
-    console.log(this.formGroup.value);
-
+    if (this.monsterId === -1) {
+      this.monsterService.add(this.monster);
+    }else{
+      this.monster.id = this.monsterId;
+      this.monsterService.update(this.monster);
+    }
+    this.navigateBack();
   }
 
   isFieldValid(fieldName: string) {
