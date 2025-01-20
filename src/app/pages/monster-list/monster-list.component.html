@@ -7,7 +7,7 @@
 
 <div id="card-list">
 	@for (monster of filteredMonsters(); track monster.name) {
-        <app-card [monster]="monster"/>
+        <app-card [monster]="monster" (click) = "openMonster(monster)"/>
     }@empty {
         <div class="centered">No monsters found !</div>
     }
@@ -16,4 +16,4 @@
     <div class="centered">Found {{filteredMonsters().length}} monsters</div>
 }
 
-<div class="centered" (click)="addMonster()"><button>Add generic monster</button></div><br><br>
+<div class="centered" (click)="addMonster()"><button>Add monster</button></div><br><br>

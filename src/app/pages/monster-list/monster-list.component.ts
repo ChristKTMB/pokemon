@@ -3,6 +3,8 @@ import { Monster } from '../../models/monster.model';
 import { MonsterService } from '../../services/monster/monster.service';
 import { CardComponent } from '../../components/card/card.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-monster-list',
@@ -12,7 +14,8 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 })
 export class MonsterListComponent {
 
-  monsterService = inject(MonsterService);
+  private monsterService = inject(MonsterService);
+  private router = inject(Router);
 
   monsters = signal<Monster[]>([]);
   count : number = 0;
@@ -31,9 +34,10 @@ export class MonsterListComponent {
   }
 
   addMonster() {
-    const genericMonster = new Monster();
-    this.monsterService.add(genericMonster);
-    this.monsters.set(this.monsterService.getAll());
+    this.router.navigate(['/monster']);
   }
 
+  openMonster(monster: Monster) {
+    this.router.navigate(['/monster', monster.id]);
+  }
 }
