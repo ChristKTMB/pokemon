@@ -16,11 +16,12 @@ import { Subscription } from 'rxjs';
 
 export class AppComponent implements OnDestroy{
 
-  private router = inject(Router);
-  private logoutSubscription: Subscription | null = null;
- 	loginService = inject(LoginService);
+	private router = inject(Router);
+	private logoutSubscription: Subscription | null = null;
 
- 	logout() {
+  	loginService = inject(LoginService);
+
+	logout() {
  		this.logoutSubscription = this.loginService.logout().subscribe({
  			next: _ => { this.navigateToLogin(); },
  			error: _ => { this.navigateToLogin(); }
@@ -35,7 +36,7 @@ export class AppComponent implements OnDestroy{
  		this.router.navigate(['home']);
  	}
 
-  ngOnDestroy(): void {
-    this.logoutSubscription?.unsubscribe();
-  }
+	ngOnDestroy(): void {
+		this.logoutSubscription?.unsubscribe();
+	}
 }

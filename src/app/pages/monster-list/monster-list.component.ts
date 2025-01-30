@@ -4,6 +4,7 @@ import { MonsterService } from '../../services/monster/monster.service';
 import { CardComponent } from '../../components/card/card.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -17,17 +18,14 @@ export class MonsterListComponent {
   private monsterService = inject(MonsterService);
   private router = inject(Router);
 
-  monsters = signal<Monster[]>([]);
+  monsters = toSignal(this.monsterService.getAll());
   count : number = 0;
   search = model<string>('');
 
   filteredMonsters = computed(() => {
-    return this.monsters().filter(monster => monster.name.includes(this.search()));
+    return this.monsters()?.filter(monster => monster.name.includes(this.search())) ?? [];
   });
   
-  constructor() {
-    this.monsters.set(this.monsterService.getAll());
-  }
 
   increaseCount() {
     this.count++;
